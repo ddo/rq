@@ -1,2 +1,2 @@
-# got
-A mini golang HTTP client
+# rq
+A nicer interface for golang stdlib HTTP client
