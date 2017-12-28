@@ -20,7 +20,7 @@ var log = dlog.New("rq:client", nil)
 type Client struct {
 	httpClient *http.Client
 
-	DefaultRq *rq.Rq // TODO
+	DefaultRq *rq.Rq // TODO: default url, method, qs, form and headers
 }
 
 // Option contains client settings
@@ -42,6 +42,9 @@ func New(opt *Option) *Client {
 	}
 
 	timeout := opt.Timeout
+	jar := opt.Jar
+	transport := opt.Transport
+
 	if opt.Timeout == 0 && !opt.NoTimeout {
 		timeout = defaultTimeout
 	}
@@ -49,7 +52,6 @@ func New(opt *Option) *Client {
 		timeout = 0
 	}
 
-	jar := opt.Jar
 	if opt.Jar == nil && !opt.NoCookie {
 		jar, _ = cookiejar.New(nil)
 	}
@@ -57,12 +59,14 @@ func New(opt *Option) *Client {
 		jar = nil
 	}
 
-	log.Info("opt:", opt)
+	log.Info("timeout:", timeout)
+	log.Info("jar:", jar)
+	log.Info("transport:", transport)
 	return &Client{
 		httpClient: &http.Client{
 			Timeout:   timeout,
 			Jar:       jar,
-			Transport: opt.Transport,
+			Transport: transport,
 		},
 	}
 }

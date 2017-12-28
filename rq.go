@@ -4,10 +4,10 @@ import (
 	"io"
 )
 
-// Rq .
+// Rq contains nicer http request interface components
 type Rq struct {
-	URL    string `json:"URL"`
-	Method string `json:"Method"`
+	URL    string `json:"url"`
+	Method string `json:"method"`
 
 	Query map[string][]string `json:"query"`
 
@@ -17,7 +17,7 @@ type Rq struct {
 	Header map[string]string `json:"header"`
 }
 
-// New .
+// New returms empty Rq object
 func New(method, URL string) *Rq {
 	return &Rq{
 		URL:    URL,
@@ -28,27 +28,27 @@ func New(method, URL string) *Rq {
 	}
 }
 
-// Get .
+// Get is a shortcut of #New
 func Get(URL string) *Rq {
 	return New("GET", URL)
 }
 
-// Post .
+// Post is a shortcut of #New
 func Post(URL string) *Rq {
 	return New("POST", URL)
 }
 
-// Put .
+// Put is a shortcut of #New
 func Put(URL string) *Rq {
 	return New("PUT", URL)
 }
 
-// Delete .
+// Delete is a shortcut of #New
 func Delete(URL string) *Rq {
 	return New("DELETE", URL)
 }
 
-// Head .
+// Head is a shortcut of #New
 func Head(URL string) *Rq {
 	return New("HEAD", URL)
 }
@@ -80,7 +80,7 @@ func (r *Rq) Send(key string, value ...string) {
 	r.Form[key] = value
 }
 
-// UnSend unsets request body
+// UnSend unsets request form
 func (r *Rq) UnSend(key string) {
 	delete(r.Form, key)
 }

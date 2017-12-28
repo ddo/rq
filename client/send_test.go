@@ -65,6 +65,26 @@ func TestSend(t *testing.T) {
 	}
 }
 
+func TestSendErr(t *testing.T) {
+	_client := New(nil)
+
+	r := rq.Post("httpbin.org/post?k=1")
+
+	data, res, err := _client.Send(r, true)
+	if err == nil {
+		t.Error()
+		return
+	}
+	if res != nil {
+		t.Error()
+		return
+	}
+	if data != nil {
+		t.Error()
+		return
+	}
+}
+
 // helper
 func verifyHTTPBinRes(data []byte) bool {
 	strs := pickjson.PickString(bytes.NewReader(data), "User-Agent", 1)
