@@ -29,7 +29,7 @@ Because golang HTTP client is a pain in the a...
 go get -u gopkg.in/ddo/rq.v0
 ```
 
-## Fetting started
+## Getting started
 
 ### Simple
 
