@@ -111,4 +111,4 @@ err := client.DelCookie("httpbin.org", "cookiename")
 
 ## TODO
 
-check at #1
+check at https://github.com/ddo/rq/issues/1
