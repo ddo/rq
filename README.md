@@ -14,8 +14,9 @@ because golang HTTP client is a pain in the a...
 
 ## features
 
-* compatible golang ``http`` stdlib as ``http.Request``, ``http.Response`` and ``http.Cookie``
+* compatible with golang ``http`` stdlib: ``http.Request``, ``http.Response`` and ``http.Cookie``
 * step by step to build your **request**
+* better HTTP **client**
 * provide the easier way to work with **cookies**
 * **import/export** allow we save/transfer requests as json ***SOON***
 * **default setting**: example default ``user-agent`` or ``accept-language`` ***SOON***
@@ -45,7 +46,7 @@ res, err := http.DefaultClient.Do(r.ParseRequest())
 defer res.Body.Close()
 ```
 
-in case you did not know that golang default HTTP client has **no timeout**.
+in case you did not know that golang default ``http.Client`` has **no timeout**.
 use **rq/client** which has ``180s`` timeout by default
 
 ```go
@@ -59,6 +60,7 @@ r.Qs("_", "123456")
 
 // Form
 r.Send("data", "data value")
+r.Send("extra", "extra value")
 
 // use default rq client
 // true to tell #Send to read all the response boby when return
@@ -84,7 +86,7 @@ r := rq.Post("https://httpbin.org/post")
 r.SendRaw(strings.NewReader("raw data binary or json"))
 ```
 
-## client
+## custom client
 
 ```go
 // by default timeout = 3min and has a cookie jar
