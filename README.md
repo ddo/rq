@@ -1,44 +1,47 @@
-# rq
+# rq [![Build Status][semaphoreci-img]][semaphoreci-url] [![Doc][godoc-img]][godoc-url]
 A nicer interface for golang stdlib HTTP client
-
-[![Doc][godoc-img]][godoc-url] rq
-
-[![Doc][godoc-img]][godoc-client-url] client
 
 [godoc-img]: https://img.shields.io/badge/godoc-Reference-brightgreen.svg?style=flat-square
 [godoc-url]: https://godoc.org/gopkg.in/ddo/rq.v0
 [godoc-client-url]: https://godoc.org/gopkg.in/ddo/rq.v0/client
+[semaphoreci-img]: https://semaphoreci.com/api/v1/ddo/rq/branches/master/badge.svg
+[semaphoreci-url]: https://semaphoreci.com/ddo/rq
 
-## why?
-because golang HTTP client is a pain in the a...
+## Why?
+Because golang HTTP client is a pain in the a...
 
-## features
+## Features
 
-* compatible with golang ``http`` stdlib: ``http.Request``, ``http.Response`` and ``http.Cookie``
-* step by step to build your **request**
-* better HTTP **client**
-* provide the easier way to work with **cookies**
-* **import/export** allow we save/transfer requests as json ***SOON***
-* **default setting**: example default ``user-agent`` or ``accept-language`` ***SOON***
+* Compatible with golang ``http`` stdlib: ``http.Request``, ``http.Response`` and ``http.Cookie``
+* Step by step to build your **request**
+* Better HTTP **client**
+* Provide the easier way to work with **cookies**
+* **Import/export** allow we save/transfer requests in JSON ***SOON***
+* **Default setting**: example default ``user-agent`` or ``accept-language`` ***SOON***
 
-## installation
+## Documents
+* rq: [here]([godoc-url])
+* client: [here]([godoc-client-url])
+
+## Installation
 
 ```sh
 go get -u gopkg.in/ddo/rq.v0
 ```
 
-## getting started
+## Fetting started
 
-simple
+### Simple
 
 ```go
+import "net/http"
 import "github.com/ddo/rq"
 
 r := rq.Get("https://httpbin.org/get")
 
-// query https://httpbin.org/get?q=1&q=2&_=123456
-r.Qs("q", "1")
-r.Qs("q", "2")
+// query https://httpbin.org/get?q=1&q=2&q=3&_=123456
+r.Qs("q", "1", "2")
+r.Qs("q", "3")
 r.Qs("_", "123456")
 
 // send with golang default HTTP client
@@ -46,7 +49,8 @@ res, err := http.DefaultClient.Do(r.ParseRequest())
 defer res.Body.Close()
 ```
 
-in case you did not know that golang default ``http.Client`` has **no timeout**.
+### Custom client
+In case you did not know that golang default ``http.Client`` has **no timeout**.
 use **rq/client** which has ``180s`` timeout by default
 
 ```go
@@ -69,7 +73,7 @@ data, res, err := client.Send(r, true)
 // read = false -> you need to call res.Body when done reading
 ```
 
-set headers
+### Headers
 
 ```go
 r := rq.Post("https://httpbin.org/post")
@@ -78,7 +82,7 @@ r.Set("Content-Type", "application/json")
 r.Set("User-Agent", "ddo/rq")
 ```
 
-raw body
+### Raw body
 
 ```go
 r := rq.Post("https://httpbin.org/post")
@@ -86,7 +90,7 @@ r := rq.Post("https://httpbin.org/post")
 r.SendRaw(strings.NewReader("raw data binary or json"))
 ```
 
-## custom client
+### Client [![Doc][godoc-img]][godoc-client-url]
 
 ```go
 // by default timeout = 3min and has a cookie jar
@@ -99,7 +103,7 @@ customClient := client.New(&Option{
 })
 ```
 
-## cookies
+### Cookies
 
 ```go
 cookies, err := client.GetCookies("httpbin.org")
@@ -111,6 +115,10 @@ err := client.SetCookie("httpbin.org", cookie)
 err := client.DelCookie("httpbin.org", "cookiename")
 ```
 
+## Debug
+
+Set env ``DLOG=*`` to enable logger to see request activities
+
 ## TODO
 
-check at https://github.com/ddo/rq/issues/1
+List here [#1](https://github.com/ddo/rq/issues/1)
