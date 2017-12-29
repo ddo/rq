@@ -96,18 +96,28 @@ r := rq.Post("https://httpbin.org/post")
 r.SendRaw(strings.NewReader("raw data binary or json"))
 ```
 
-### Client [![Doc][godoc-img]][godoc-client-url]
+## Client [![Doc][godoc-img]][godoc-client-url]
+
+### Default
 
 ```go
 // by default timeout = 3min and has a cookie jar
 customClient := client.New(nil)
+```
 
-// or custom timeout = 10s and no cookie jar
+### Custom Options
+
+```go
+// custom timeout = 10s and no cookie jar
 customClient := client.New(&Option{
     Timeout: time.Second * 10,
     NoCookie: true,
 })
+```
 
+### Default settings
+
+```go
 // set default User-Agent
 defaultRq := rq.Get("")
 defaultRq.Set("User-Agent", "github.com/ddo/rq")
@@ -121,7 +131,7 @@ customClient := client.New(&Option{
 // if User-Agent header in request is not set
 ```
 
-### Cookies
+## Cookies
 
 ```go
 cookies, err := client.GetCookies("httpbin.org")
