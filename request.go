@@ -46,8 +46,10 @@ func (r *Rq) ParseRequest() (req *http.Request, err error) {
 	}
 
 	// header
-	for key, value := range r.Header {
-		req.Header.Add(key, value)
+	for key, values := range r.Header {
+		for _, value := range values {
+			req.Header.Add(key, value)
+		}
 	}
 
 	return

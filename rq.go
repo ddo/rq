@@ -9,12 +9,11 @@ type Rq struct {
 	URL    string `json:"url"`
 	Method string `json:"method"`
 
-	Query map[string][]string `json:"query"`
+	Query  map[string][]string `json:"query"`
+	Form   map[string][]string `json:"form"`
+	Header map[string][]string `json:"header"`
 
-	Form map[string][]string `json:"form"`
-	Body io.Reader           `json:"-"`
-
-	Header map[string]string `json:"header"`
+	Body io.Reader `json:"-"`
 }
 
 // New returms empty Rq object
@@ -22,9 +21,10 @@ func New(method, URL string) *Rq {
 	return &Rq{
 		URL:    URL,
 		Method: method,
+
 		Query:  map[string][]string{},
 		Form:   map[string][]string{},
-		Header: map[string]string{},
+		Header: map[string][]string{},
 	}
 }
 
@@ -54,8 +54,8 @@ func Head(URL string) *Rq {
 }
 
 // Set sets request header
-func (r *Rq) Set(key, value string) {
-	r.Header[key] = value
+func (r *Rq) Set(key string, value ...string) {
+	r.Header[key] = append(r.Header[key], value...)
 }
 
 // UnSet unsets request header

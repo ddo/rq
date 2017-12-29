@@ -79,8 +79,17 @@ func TestHead(t *testing.T) {
 
 func TestSet(t *testing.T) {
 	rq := Get("url")
-	rq.Set("User-Agent", "github.com/ddo/rq")
-	if rq.Header["User-Agent"] != "github.com/ddo/rq" {
+	rq.Set("User-Agent", "github.com/ddo/rq", "ddo")
+	rq.Set("User-Agent", "ddo.me")
+	if rq.Header["User-Agent"][0] != "github.com/ddo/rq" {
+		t.Error()
+		return
+	}
+	if rq.Header["User-Agent"][1] != "ddo" {
+		t.Error()
+		return
+	}
+	if rq.Header["User-Agent"][2] != "ddo.me" {
 		t.Error()
 		return
 	}
