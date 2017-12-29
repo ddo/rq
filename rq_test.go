@@ -103,7 +103,8 @@ func TestSet(t *testing.T) {
 
 func TestQs(t *testing.T) {
 	rq := Get("url")
-	rq.Qs("qs", "1", "22", "333")
+	rq.Qs("qs", "1")
+	rq.Qs("qs", "22", "333")
 	if !sameArr(rq.Query["qs"], []string{"1", "22", "333"}) {
 		t.Error()
 		return
@@ -118,7 +119,8 @@ func TestQs(t *testing.T) {
 
 func TestSend(t *testing.T) {
 	rq := Post("url")
-	rq.Send("data", "1", "22", "333")
+	rq.Send("data", "1")
+	rq.Send("data", "22", "333")
 	if !sameArr(rq.Form["data"], []string{"1", "22", "333"}) {
 		t.Error()
 		return

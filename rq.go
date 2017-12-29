@@ -65,7 +65,7 @@ func (r *Rq) UnSet(key string) {
 
 // Qs sets request query
 func (r *Rq) Qs(key string, value ...string) {
-	r.Query[key] = value
+	r.Query[key] = append(r.Query[key], value...)
 }
 
 // UnQs unsets request query
@@ -77,7 +77,7 @@ func (r *Rq) UnQs(key string, value ...string) {
 // and also set the request content type as application/x-www-form-urlencoded
 // if there is no content type header
 func (r *Rq) Send(key string, value ...string) {
-	r.Form[key] = value
+	r.Form[key] = append(r.Form[key], value...)
 }
 
 // UnSend unsets request form
