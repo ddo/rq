@@ -69,7 +69,7 @@ func (r *Rq) Qs(key string, value ...string) {
 }
 
 // UnQs unsets request query
-func (r *Rq) UnQs(key string, value ...string) {
+func (r *Rq) UnQs(key string) {
 	delete(r.Query, key)
 }
 
