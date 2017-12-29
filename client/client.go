@@ -20,7 +20,7 @@ var log = dlog.New("rq:client", nil)
 type Client struct {
 	httpClient *http.Client
 
-	DefaultRq *rq.Rq // TODO: default url, method, qs, form and headers
+	defaultRq *rq.Rq // default url, method, qs, form and headers if they are nil
 }
 
 // Option contains client settings
@@ -32,6 +32,8 @@ type Option struct {
 	NoCookie bool // if NoCookie is true Jar will be skip
 
 	Transport http.RoundTripper
+
+	DefaultRq *rq.Rq
 }
 
 // New returns new client which init with provided options
@@ -44,6 +46,7 @@ func New(opt *Option) *Client {
 	timeout := opt.Timeout
 	jar := opt.Jar
 	transport := opt.Transport
+	defaultRq := opt.DefaultRq
 
 	if opt.Timeout == 0 && !opt.NoTimeout {
 		timeout = defaultTimeout
@@ -68,9 +71,50 @@ func New(opt *Option) *Client {
 			Jar:       jar,
 			Transport: transport,
 		},
+		defaultRq: defaultRq,
 	}
 }
 
 // DefaultClient has default timeout and stdlib default transport
 // no cookie management
 var DefaultClient = New(&Option{NoCookie: true})
+
+// ApplyDefaultRq overrides Rq properties with default value if key is not set
+func ApplyDefaultRq(defaultRq, _rq *rq.Rq) (newRq *rq.Rq) {
+	newRq = &rq.Rq{}
+
+	// copy
+	*newRq = *_rq
+
+	// return as is _rq if no defaultRq
+	if defaultRq == nil {
+		return
+	}
+
+	// url
+	if newRq.URL == "" {
+		newRq.URL = defaultRq.URL
+	}
+
+	// query
+	for k, v := range defaultRq.Query {
+		if _, ok := newRq.Query[k]; !ok {
+			newRq.Query[k] = v
+		}
+	}
+
+	// form
+	for k, v := range defaultRq.Form {
+		if _, ok := newRq.Form[k]; !ok {
+			newRq.Form[k] = v
+		}
+	}
+
+	// header
+	for k, v := range defaultRq.Header {
+		if _, ok := newRq.Header[k]; !ok {
+			newRq.Header[k] = v
+		}
+	}
+	return
+}

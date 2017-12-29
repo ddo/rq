@@ -10,8 +10,18 @@ import (
 
 // Send sends the request and read it if read is true
 // remember to close the res.Body if read is false
+// Send also set content-type to application/x-www-form-urlencoded
+// if form is available
 func (c *Client) Send(r *rq.Rq, read bool) (data []byte, res *http.Response, err error) {
-	req, err := r.ParseRequest()
+	// apply defaultRq
+	newRq := ApplyDefaultRq(c.defaultRq, r)
+
+	// set content type for form
+	if _, ok := newRq.Header["Content-Type"]; !ok && len(newRq.Form) > 0 && newRq.Body == nil {
+		r.Set("Content-Type", "application/x-www-form-urlencoded")
+	}
+
+	req, err := newRq.ParseRequest()
 	if err != nil {
 		log.Error(err)
 		return

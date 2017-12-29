@@ -74,8 +74,6 @@ func (r *Rq) UnQs(key string) {
 }
 
 // Send sets request form
-// and also set the request content type as application/x-www-form-urlencoded
-// if there is no content type header
 func (r *Rq) Send(key string, value ...string) {
 	r.Form[key] = append(r.Form[key], value...)
 }

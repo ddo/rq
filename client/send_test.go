@@ -16,7 +16,7 @@ func TestDefaultSend(t *testing.T) {
 	r.Qs("v", "4")
 
 	r.Set("User-Agent", "github.com/ddo/rq")
-	r.Set("Content-Type", "application/x-www-form-urlencoded")
+	r.Set("Content-Type", "application/x-www-form-urlencoded gaga")
 
 	r.Send("data", "data value 1", "data value 2")
 	r.Send("extra", "data value 3")
@@ -30,22 +30,24 @@ func TestDefaultSend(t *testing.T) {
 		t.Error()
 		return
 	}
-	if !verifyHTTPBinRes(data) {
+	if !verifyHTTPBinRes(data, "application/x-www-form-urlencoded gaga") {
 		t.Error()
 		return
 	}
 }
 
 func TestSend(t *testing.T) {
-	_client := New(nil)
+	defaultRq := rq.Get("")
+	defaultRq.Set("User-Agent", "github.com/ddo/rq")
+
+	_client := New(&Option{
+		DefaultRq: defaultRq,
+	})
 
 	r := rq.Post("https://httpbin.org/post?k=1")
 
 	r.Qs("k", "2", "3")
 	r.Qs("v", "4")
-
-	r.Set("User-Agent", "github.com/ddo/rq")
-	r.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	r.Send("data", "data value 1", "data value 2")
 	r.Send("extra", "data value 3")
@@ -59,7 +61,7 @@ func TestSend(t *testing.T) {
 		t.Error()
 		return
 	}
-	if !verifyHTTPBinRes(data) {
+	if !verifyHTTPBinRes(data, "application/x-www-form-urlencoded") {
 		t.Error()
 		return
 	}
@@ -86,13 +88,13 @@ func TestSendErr(t *testing.T) {
 }
 
 // helper
-func verifyHTTPBinRes(data []byte) bool {
+func verifyHTTPBinRes(data []byte, contentType string) bool {
 	strs := pickjson.PickString(bytes.NewReader(data), "User-Agent", 1)
 	if len(strs) == 0 || strs[0] != "github.com/ddo/rq" {
 		return false
 	}
 	strs = pickjson.PickString(bytes.NewReader(data), "Content-Type", 1)
-	if len(strs) == 0 || strs[0] != "application/x-www-form-urlencoded" {
+	if len(strs) == 0 || strs[0] != contentType {
 		return false
 	}
 	strs = pickjson.PickString(bytes.NewReader(data), "url", 1)

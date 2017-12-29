@@ -26,11 +26,6 @@ func (r *Rq) ParseRequest() (req *http.Request, err error) {
 	// body
 	reader := r.Body
 	if reader == nil && len(r.Form) > 0 {
-		// set content type
-		if _, ok := r.Header["Content-Type"]; !ok {
-			r.Set("Content-Type", "application/x-www-form-urlencoded")
-		}
-
 		body := url.Values{}
 		for key, values := range r.Form {
 			for _, value := range values {
