@@ -6,6 +6,11 @@ import (
 
 // GetCookies returns cookies by hostname
 func (c *Client) GetCookies(hostname string) (cookies []*http.Cookie, err error) {
+	// skip if no jar
+	if c.httpClient.Jar == nil {
+		return
+	}
+
 	u, err := parseHostname(hostname)
 	if err != nil {
 		return
@@ -35,6 +40,11 @@ func (c *Client) GetCookie(hostname, name string) (cookie *http.Cookie, err erro
 
 // SetCookies sets client cookies with the hostname
 func (c *Client) SetCookies(hostname string, cookies []*http.Cookie) (err error) {
+	// skip if no jar
+	if c.httpClient.Jar == nil {
+		return
+	}
+
 	u, err := parseHostname(hostname)
 	if err != nil {
 		return
