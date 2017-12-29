@@ -22,8 +22,8 @@ Because golang HTTP client is a pain in the a...
 * Step by step to build your **request**
 * Better HTTP **client**
 * Provide the easier way to work with **cookies**
-* **Import/export** allow we save/transfer requests in JSON ***SOON***
-* **Default setting**: example default ``user-agent`` or ``accept-language`` ***SOON***
+* **Import/export** allow we save/transfer requests in JSON
+* **Default setting**: example default ``User-Agent`` or ``Accept-Language``
 
 ## Documents
 * rq: [here]([godoc-url])
@@ -107,6 +107,18 @@ customClient := client.New(&Option{
     Timeout: time.Second * 10,
     NoCookie: true,
 })
+
+// set default User-Agent
+defaultRq := rq.Get("")
+defaultRq.Set("User-Agent", "github.com/ddo/rq")
+
+customClient := client.New(&Option{
+    DefaultRq: defaultRq,
+})
+
+// from now all the requests called via this customClient
+// gonna have the User-Agent header = "github.com/ddo/rq"
+// if User-Agent header in request is not set
 ```
 
 ### Cookies
