@@ -14,8 +14,6 @@ func TestJSONify(t *testing.T) {
 	r.Qs("v", "4")
 	r.Qs("v", "5", "6")
 
-	r.Set("User-Agent", "github.com/ddo/rq")
-
 	r.Send("data", "data value 1", "data value 2")
 	r.Send("extra", "data value 3")
 
@@ -24,7 +22,7 @@ func TestJSONify(t *testing.T) {
 		t.Error()
 		return
 	}
-	if string(data) != `{"url":"https://ddo.me?k=1","method":"PUT","query":{"k":["2","3"],"v":["4","5","6"]},"form":{"data":["data value 1","data value 2"],"extra":["data value 3"]},"header":{"User-Agent":["github.com/ddo/rq"]}}` {
+	if string(data) != `{"url":"https://ddo.me?k=1","method":"PUT","query":{"k":["2","3"],"v":["4","5","6"]},"form":{"data":["data value 1","data value 2"],"extra":["data value 3"]},"header":{}}` {
 		t.Error()
 		return
 	}
@@ -47,7 +45,7 @@ func TestNewFromJSON(t *testing.T) {
 		t.Error()
 		return
 	}
-	if len(r.Query) != 2 || len(r.Form) != 2 || len(r.Header) != 1 {
+	if len(r.Query) != 2 || len(r.Form) != 2 || len(r.Header) != 0 {
 		t.Error()
 		return
 	}

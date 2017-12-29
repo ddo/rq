@@ -9,9 +9,9 @@ type Rq struct {
 	URL    string `json:"url"`
 	Method string `json:"method"`
 
-	Query  map[string][]string `json:"query,omitempty"`
-	Form   map[string][]string `json:"form,omitempty"`
-	Header map[string][]string `json:"header,omitempty"`
+	Query  map[string][]string `json:"query"`
+	Form   map[string][]string `json:"form"`
+	Header map[string][]string `json:"header"`
 
 	Body io.Reader `json:"-"`
 }
