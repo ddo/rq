@@ -53,7 +53,7 @@ func Head(URL string) *Rq {
 	return New("HEAD", URL)
 }
 
-// Set sets request header
+// Set appends request header
 func (r *Rq) Set(key string, value ...string) {
 	r.Header[key] = append(r.Header[key], value...)
 }
@@ -63,7 +63,7 @@ func (r *Rq) UnSet(key string) {
 	delete(r.Header, key)
 }
 
-// Qs sets request query
+// Qs appends request query
 func (r *Rq) Qs(key string, value ...string) {
 	r.Query[key] = append(r.Query[key], value...)
 }
@@ -73,7 +73,7 @@ func (r *Rq) UnQs(key string) {
 	delete(r.Query, key)
 }
 
-// Send sets request form
+// Send appends request form
 func (r *Rq) Send(key string, value ...string) {
 	r.Form[key] = append(r.Form[key], value...)
 }
