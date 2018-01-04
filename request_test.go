@@ -85,3 +85,32 @@ func TestParseRequestRaw(t *testing.T) {
 		return
 	}
 }
+
+func TestParseRequestInvalidURL(t *testing.T) {
+	rq := Get(":")
+
+	req, err := rq.ParseRequest()
+	if err == nil {
+		t.Error()
+		return
+	}
+	if req != nil {
+		t.Error()
+		return
+	}
+}
+
+func TestParseRequestInvalidMethod(t *testing.T) {
+	rq := Get("https://ddo.me")
+	rq.Method = ":"
+
+	req, err := rq.ParseRequest()
+	if err == nil {
+		t.Error()
+		return
+	}
+	if req != nil {
+		t.Error()
+		return
+	}
+}
