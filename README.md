@@ -1,9 +1,10 @@
 # rq
 A nicer interface for golang stdlib HTTP client
 
-[![Doc][godoc-img]][godoc-url]
 [![Build Status][semaphoreci-img]][semaphoreci-url]
+[![Doc][godoc-img]][godoc-url]
 [![Go Report][goreport-img]][goreport-url]
+[![codecov][codecov-img]][codecov-url]
 
 [godoc-img]: https://img.shields.io/badge/godoc-Reference-brightgreen.svg?style=flat-square
 [godoc-url]: https://godoc.org/gopkg.in/ddo/rq.v0
@@ -12,6 +13,8 @@ A nicer interface for golang stdlib HTTP client
 [semaphoreci-url]: https://semaphoreci.com/ddo/rq
 [goreport-img]: https://goreportcard.com/badge/github.com/ddo/rq
 [goreport-url]: https://goreportcard.com/report/github.com/ddo/rq
+[codecov-img]: https://codecov.io/gh/ddo/rq/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/ddo/rq
 
 ## Why?
 Because golang HTTP client is a pain in the a...
