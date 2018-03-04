@@ -29,8 +29,9 @@ Because golang HTTP client is a pain in the a...
 * **Default setting**: example default ``User-Agent`` or ``Accept-Language``
 
 ## Documents
-* rq: [here]([godoc-url])
-* client: [here]([godoc-client-url])
+
+* rq: [here][godoc-url]
+* client: [here][godoc-client-url]
 
 ## Installation
 
@@ -104,7 +105,9 @@ r.SendRaw(strings.NewReader("raw data binary or json"))
 ### Default
 
 ```go
-// by default timeout = 3min and has a cookie jar
+// by default timeout = 3min
+// has a cookie jar
+// and stops after 10 consecutive requests (10 redirects)
 customClient := client.New(nil)
 ```
 
@@ -132,6 +135,17 @@ customClient := client.New(&Option{
 // from now all the requests called via this customClient
 // gonna have the User-Agent header = "github.com/ddo/rq"
 // if User-Agent header in request is not set
+```
+
+## Redirect
+
+* Default ``client`` stops after 10 consecutive requests
+* Or you can use ``client.NoRedirect`` to disable redirect
+
+```go
+client.New(&Option{
+    CheckRedirect: client.NoCheckRedirect,
+})
 ```
 
 ## Cookies
