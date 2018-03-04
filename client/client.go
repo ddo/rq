@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	defaultTimeout = 3 * time.Minute
+	defaultTimeout   = 3 * time.Minute
+	defaultRedirects = 10
 )
 
 var log = dlog.New("rq:client", nil)
@@ -31,7 +32,8 @@ type Option struct {
 	Jar      http.CookieJar
 	NoCookie bool // if NoCookie is true Jar will be skip
 
-	Transport http.RoundTripper
+	Transport     http.RoundTripper
+	CheckRedirect func(req *http.Request, via []*http.Request) error
 
 	DefaultRq *rq.Rq
 }
@@ -46,6 +48,7 @@ func New(opt *Option) *Client {
 	timeout := opt.Timeout
 	jar := opt.Jar
 	transport := opt.Transport
+	checkRedirect := opt.CheckRedirect
 	defaultRq := opt.DefaultRq
 
 	if opt.Timeout == 0 && !opt.NoTimeout {
@@ -62,14 +65,20 @@ func New(opt *Option) *Client {
 		jar = nil
 	}
 
+	if checkRedirect == nil {
+		checkRedirect = DefaultCheckRedirect
+	}
+
 	log.Info("timeout:", timeout)
 	log.Info("jar:", jar)
 	log.Info("transport:", transport)
+	log.Info("checkRedirect:", checkRedirect)
 	return &Client{
 		httpClient: &http.Client{
-			Timeout:   timeout,
-			Jar:       jar,
-			Transport: transport,
+			Timeout:       timeout,
+			Jar:           jar,
+			Transport:     transport,
+			CheckRedirect: checkRedirect,
 		},
 		defaultRq: defaultRq,
 	}
