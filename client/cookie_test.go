@@ -34,7 +34,7 @@ func TestGetCookies(t *testing.T) {
 		return
 	}
 
-	cookies, err = testCookieClient.GetCookies("http://httpbin.org")
+	cookies, err = testCookieClient.GetCookies("https://httpbin.org")
 	if err != nil {
 		t.Error()
 		return
@@ -81,7 +81,7 @@ func TestSetCookies(t *testing.T) {
 		return
 	}
 
-	newCookies, err := testCookieClient.GetCookies("http://httpbin.org")
+	newCookies, err := testCookieClient.GetCookies("https://httpbin.org")
 	if err != nil {
 		t.Error()
 		return
@@ -103,7 +103,7 @@ func TestSetCookie(t *testing.T) {
 		return
 	}
 
-	newCookies, err := testCookieClient.GetCookies("http://httpbin.org")
+	newCookies, err := testCookieClient.GetCookies("https://httpbin.org")
 	if err != nil {
 		t.Error()
 		return
@@ -125,7 +125,7 @@ func TestSetCookieReplace(t *testing.T) {
 		return
 	}
 
-	newCookie, err := testCookieClient.GetCookie("http://httpbin.org", "k2")
+	newCookie, err := testCookieClient.GetCookie("https://httpbin.org", "k2")
 	if err != nil {
 		t.Error()
 		return
@@ -143,7 +143,7 @@ func TestDelCookie(t *testing.T) {
 		return
 	}
 
-	newCookies, err := testCookieClient.GetCookies("http://httpbin.org")
+	newCookies, err := testCookieClient.GetCookies("https://httpbin.org")
 	if err != nil {
 		t.Error()
 		return
