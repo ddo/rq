@@ -1,6 +1,7 @@
 package client
 
 import (
+	"errors"
 	"net"
 	"net/http"
 	"net/url"
@@ -17,13 +18,12 @@ func (c *Client) SetProxy(rawURL string) (err error) {
 		return
 	}
 
-	transport, ok := c.httpClient.Transport.(*http.Transport)
-	if !ok {
-		transport = nil
-	}
+	// handle nil transport
+	client := c.httpClient
+	if client.Transport == nil {
 
-	if transport == nil {
-		transport = &http.Transport{
+		// this default transport is from net/http DefaultTransport
+		client.Transport = &http.Transport{
 			DialContext: (&net.Dialer{
 				Timeout:   30 * time.Second,
 				KeepAlive: 30 * time.Second,
@@ -36,10 +36,15 @@ func (c *Client) SetProxy(rawURL string) (err error) {
 		}
 	}
 
-	transport.Proxy = func(req *http.Request) (*url.URL, error) {
-		return u, nil
+	// we need to conversion client.Transport which is RoundTripper interface to *http.Transport to set Proxy
+	transport, ok := client.Transport.(*http.Transport)
+	if !ok {
+		err = errors.New("client.Transport (http.RoundTripper - interface) is not *http.Transport -> no Proxy")
+		log.Error(err)
+		return
 	}
 
+	transport.Proxy = http.ProxyURL(u)
 	log.Info("DONE:", u)
 	return
 }

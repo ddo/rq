@@ -32,7 +32,9 @@ type Option struct {
 	Jar      http.CookieJar
 	NoCookie bool // if NoCookie is true Jar will be skip
 
-	Transport     http.RoundTripper
+	Proxy     string // Proxy option is the sugar syntax for Transport.Proxy
+	Transport http.RoundTripper
+
 	CheckRedirect func(req *http.Request, via []*http.Request) error
 
 	DefaultRq *rq.Rq
@@ -47,6 +49,7 @@ func New(opt *Option) *Client {
 
 	timeout := opt.Timeout
 	jar := opt.Jar
+	proxy := opt.Proxy
 	transport := opt.Transport
 	checkRedirect := opt.CheckRedirect
 	defaultRq := opt.DefaultRq
@@ -71,9 +74,11 @@ func New(opt *Option) *Client {
 
 	log.Info("timeout:", timeout)
 	log.Info("jar:", jar)
+	log.Info("proxy:", proxy)
 	log.Info("transport:", transport)
 	log.Info("checkRedirect:", checkRedirect)
-	return &Client{
+
+	client := &Client{
 		httpClient: &http.Client{
 			Timeout:       timeout,
 			Jar:           jar,
@@ -82,6 +87,15 @@ func New(opt *Option) *Client {
 		},
 		defaultRq: defaultRq,
 	}
+
+	if proxy != "" {
+		err := client.SetProxy(proxy)
+		if err != nil {
+			return nil
+		}
+	}
+
+	return client
 }
 
 // DefaultClient has default timeout and stdlib default transport
