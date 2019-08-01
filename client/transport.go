@@ -9,8 +9,14 @@ import (
 )
 
 // SetProxy sets client proxy by url string
+// if url is empty, no proxy is used
 func (c *Client) SetProxy(rawURL string) (err error) {
 	log.Info("url:", rawURL)
+
+	if rawURL == "" {
+		c.UnSetProxy()
+		return
+	}
 
 	u, err := url.Parse(rawURL)
 	if err != nil {
@@ -46,5 +52,23 @@ func (c *Client) SetProxy(rawURL string) (err error) {
 
 	transport.Proxy = http.ProxyURL(u)
 	log.Info("DONE:", u)
+	return
+}
+
+// UnSetProxy unsets client proxy
+func (c *Client) UnSetProxy() {
+	log.Info()
+
+	client := c.httpClient
+	if client.Transport == nil {
+		return
+	}
+
+	transport, ok := client.Transport.(*http.Transport)
+	if !ok {
+		return
+	}
+
+	transport.Proxy = nil
 	return
 }

@@ -5,6 +5,10 @@ import (
 	"testing"
 )
 
+const (
+	test_proxy_url = "https://127.0.0.1:8888"
+)
+
 func TestSetProxy(t *testing.T) {
 	client := New(nil)
 	if client == nil {
@@ -12,18 +16,19 @@ func TestSetProxy(t *testing.T) {
 		return
 	}
 
-	err := client.SetProxy("https://127.0.0.1:8888")
+	err := client.SetProxy(test_proxy_url)
 	if err != nil {
 		t.Error()
 		return
 	}
 
-	proxy, err := client.httpClient.Transport.(*http.Transport).Proxy(nil)
+	transport := client.httpClient.Transport.(*http.Transport)
+	proxy, err := transport.Proxy(nil)
 	if err != nil {
 		t.Error()
 		return
 	}
-	if proxy.String() != "https://127.0.0.1:8888" {
+	if proxy.String() != test_proxy_url {
 		t.Error()
 		return
 	}
@@ -45,19 +50,38 @@ func TestSetProxyInvalidURL(t *testing.T) {
 
 func TestSetProxyFromNew(t *testing.T) {
 	client := New(&Option{
-		Proxy: "https://127.0.0.1:8888",
+		Proxy: test_proxy_url,
 	})
 	if client == nil {
 		t.Error()
 		return
 	}
 
-	proxy, err := client.httpClient.Transport.(*http.Transport).Proxy(nil)
+	transport := client.httpClient.Transport.(*http.Transport)
+	proxy, err := transport.Proxy(nil)
 	if err != nil {
 		t.Error()
 		return
 	}
-	if proxy.String() != "https://127.0.0.1:8888" {
+	if proxy.String() != test_proxy_url {
+		t.Error()
+		return
+	}
+}
+
+func TestUnSetProxy(t *testing.T) {
+	client := New(&Option{
+		Proxy: test_proxy_url,
+	})
+	if client == nil {
+		t.Error()
+		return
+	}
+
+	client.UnSetProxy()
+
+	transport := client.httpClient.Transport.(*http.Transport)
+	if transport.Proxy != nil {
 		t.Error()
 		return
 	}
