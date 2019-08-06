@@ -1,14 +1,17 @@
-# rq
+# rq [![Build Status][semaphoreci-img]][semaphoreci-url] [![Go Report][goreport-img]][goreport-url] [![codecov][codecov-img]][codecov-url]
+
 A nicer interface for golang stdlib HTTP client
 
-[![Doc][godoc-img]][godoc-url]
-[![Build Status][semaphoreci-img]][semaphoreci-url]
-[![Go Report][goreport-img]][goreport-url]
-[![codecov][codecov-img]][codecov-url]
+## Documents
+
+-   rq: [here][godoc-url]
+-   client: [here][godoc-client-url]
+-   jar: [here][godoc-jar-url]
 
 [godoc-img]: https://img.shields.io/badge/godoc-Reference-brightgreen.svg
 [godoc-url]: https://godoc.org/gopkg.in/ddo/rq.v0
 [godoc-client-url]: https://godoc.org/gopkg.in/ddo/rq.v0/client
+[godoc-jar-url]: https://godoc.org/gopkg.in/ddo/rq.v0/client/jar
 [semaphoreci-img]: https://semaphoreci.com/api/v1/ddo/rq/branches/master/shields_badge.svg
 [semaphoreci-url]: https://semaphoreci.com/ddo/rq
 [goreport-img]: https://goreportcard.com/badge/github.com/ddo/rq
@@ -17,21 +20,17 @@ A nicer interface for golang stdlib HTTP client
 [codecov-url]: https://codecov.io/gh/ddo/rq
 
 ## Why?
+
 Because golang HTTP client is a pain in the a...
 
 ## Features
 
-* Compatible with golang ``http`` stdlib: ``http.Request``, ``http.Response`` and ``http.Cookie``
-* Step by step to build your **request**
-* Better HTTP **client**
-* Provide the easier way to work with **cookies**
-* **Import/export** allow we save/transfer requests in JSON
-* **Default setting**: example default ``User-Agent`` or ``Accept-Language``
-
-## Documents
-
-* rq: [here][godoc-url]
-* client: [here][godoc-client-url]
+-   Compatible with golang `http` stdlib: `http.Request`, `http.Response` and `http.Cookie`
+-   Step by step to build your **request**
+-   Better HTTP **client**
+-   Better **cookie jar**
+-   **Import/export** allow we save/transfer requests in JSON
+-   **Default setting**: example default `User-Agent` or `Accept-Language`
 
 ## Installation
 
@@ -60,8 +59,9 @@ defer res.Body.Close()
 ```
 
 ### Custom client
-In case you did not know that golang default ``http.Client`` has **no timeout**.
-use **rq/client** which has ``180s`` timeout by default
+
+In case you did not know that golang default `http.Client` has **no timeout**.
+use **rq/client** which has `180s` timeout by default
 
 ```go
 import "github.com/ddo/rq"
@@ -106,7 +106,7 @@ r.SendRaw(strings.NewReader("raw data binary or json"))
 
 ```go
 // by default timeout = 3min
-// has a cookie jar
+// no cookie jar
 // and stops after 10 consecutive requests (10 redirects)
 customClient := client.New(nil)
 ```
@@ -114,10 +114,14 @@ customClient := client.New(nil)
 ### Custom Options
 
 ```go
-// custom timeout = 10s and no cookie jar
+import "github.com/ddo/rq/client/jar"
+
+cookieJar := jar.New()
+
+// custom timeout = 10s and cookie jar
 customClient := client.New(&Option{
     Timeout: time.Second * 10,
-    NoCookie: true,
+    jar: cookieJar,
 })
 ```
 
@@ -139,8 +143,8 @@ customClient := client.New(&Option{
 
 ## Redirect
 
-* Default ``client`` stops after 10 consecutive requests
-* Or you can use ``client.NoRedirect`` to disable redirect
+-   Default `client` stops after 10 consecutive requests
+-   Or you can use `client.NoRedirect` to disable redirect
 
 ```go
 client.New(&Option{
@@ -148,21 +152,39 @@ client.New(&Option{
 })
 ```
 
-## Cookies
+## Cookies [![Doc][godoc-img]][godoc-jar-url]
 
 ```go
-cookies, err := client.GetCookies("httpbin.org")
-cookie, err := client.GetCookie("httpbin.org", "cookiename").
+import "github.com/ddo/rq/client/jar"
 
-err := client.SetCookies("httpbin.org", cookies)
-err := client.SetCookie("httpbin.org", cookie)
+cookieJar := jar.New()
 
-err := client.DelCookie("httpbin.org", "cookiename")
+customClient := client.New(&client.Option{
+    Jar: cookieJar,
+})
+
+// get all cookies by hostname
+cookies, err := cookieJar.Get("httpbin.org")
+
+// get a cookie by hostname and name
+cookie, err := cookieJar.GetByName("httpbin.org", "cookiename").
+
+// set cookies
+err := cookieJar.Set("httpbin.org", cookies)
+
+// set a cookie
+err := cookieJar.SetOne("httpbin.org", cookie)
+
+// clear the cookie jar
+err := cookieJar.Clear("httpbin.org")
+
+// delete a cookie by it's name
+err := cookieJar.Delete("httpbin.org", "cookiename")
 ```
 
 ## Debug
 
-Set env ``DLOG=*`` to enable logger to see request activities
+Set env `DLOG=*` to enable logger to see request activities
 
 ## TODO
 
