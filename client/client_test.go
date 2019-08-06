@@ -1,11 +1,11 @@
 package client
 
 import (
-	"net/http/cookiejar"
 	"testing"
 	"time"
 
 	"github.com/ddo/rq"
+	"github.com/ddo/rq/client/jar"
 )
 
 func TestNewDefaultClient(t *testing.T) {
@@ -29,7 +29,7 @@ func TestNew(t *testing.T) {
 		t.Error()
 		return
 	}
-	if _client.httpClient.Jar == nil {
+	if _client.httpClient.Jar != nil {
 		t.Error()
 		return
 	}
@@ -47,7 +47,7 @@ func TestNewWithTimeout(t *testing.T) {
 		t.Error()
 		return
 	}
-	if _client.httpClient.Jar == nil {
+	if _client.httpClient.Jar != nil {
 		t.Error()
 		return
 	}
@@ -66,7 +66,7 @@ func TestNewWithNoTimeout(t *testing.T) {
 		t.Error()
 		return
 	}
-	if _client.httpClient.Jar == nil {
+	if _client.httpClient.Jar != nil {
 		t.Error()
 		return
 	}
@@ -77,7 +77,7 @@ func TestNewWithNoTimeout(t *testing.T) {
 }
 
 func TestNewWithCookie(t *testing.T) {
-	jar, _ := cookiejar.New(nil)
+	jar := jar.New()
 	_client := New(&Option{
 		Jar: jar,
 	})
@@ -96,10 +96,8 @@ func TestNewWithCookie(t *testing.T) {
 }
 
 func TestNewWithNoCookie(t *testing.T) {
-	jar, _ := cookiejar.New(nil)
 	_client := New(&Option{
-		Jar:      jar,
-		NoCookie: true,
+		Jar: nil,
 	})
 	if _client.httpClient.Timeout != defaultTimeout {
 		t.Error()
