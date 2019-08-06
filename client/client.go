@@ -2,12 +2,12 @@ package client
 
 import (
 	"net/http"
-	"net/http/cookiejar"
 	"time"
 
 	"gopkg.in/ddo/go-dlog.v2"
 
 	"github.com/ddo/rq"
+	"github.com/ddo/rq/client/jar"
 )
 
 const (
@@ -29,8 +29,7 @@ type Option struct {
 	Timeout   time.Duration
 	NoTimeout bool // if NoTimeout is false Timeout will be set as default
 
-	Jar      http.CookieJar
-	NoCookie bool // if NoCookie is true Jar will be skip
+	Jar *jar.Jar // if Jar is nil there no cookie jar
 
 	Proxy     string // Proxy option is the sugar syntax for Transport.Proxy
 	Transport http.RoundTripper
@@ -41,14 +40,13 @@ type Option struct {
 }
 
 // New returns new client which init with provided options
-// cookie management is enable by default
 func New(opt *Option) *Client {
 	if opt == nil {
 		opt = &Option{}
 	}
 
 	timeout := opt.Timeout
-	jar := opt.Jar
+	var jar http.CookieJar
 	proxy := opt.Proxy
 	transport := opt.Transport
 	checkRedirect := opt.CheckRedirect
@@ -61,11 +59,8 @@ func New(opt *Option) *Client {
 		timeout = 0
 	}
 
-	if opt.Jar == nil && !opt.NoCookie {
-		jar, _ = cookiejar.New(nil)
-	}
-	if opt.NoCookie {
-		jar = nil
+	if opt.Jar != nil {
+		jar = opt.Jar.GetHTTPJar()
 	}
 
 	if checkRedirect == nil {
@@ -100,7 +95,7 @@ func New(opt *Option) *Client {
 
 // DefaultClient has default timeout and stdlib default transport
 // no cookie management
-var DefaultClient = New(&Option{NoCookie: true})
+var DefaultClient = New(nil)
 
 // ApplyDefaultRq overrides Rq properties with default value if key is not set
 func ApplyDefaultRq(defaultRq, _rq *rq.Rq) (newRq *rq.Rq) {

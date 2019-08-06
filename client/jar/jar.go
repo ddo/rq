@@ -23,6 +23,11 @@ func New() *Jar {
 	}
 }
 
+// GetHTTPJar returns stdlib http.CookieJar
+func (j *Jar) GetHTTPJar() http.CookieJar {
+	return j._jar
+}
+
 // Get returns all cookies by hostname
 func (j *Jar) Get(hostname string) (cookies []*http.Cookie, err error) {
 	u, err := parseHostname(hostname)
@@ -42,9 +47,9 @@ func (j *Jar) GetByName(hostname, name string) (cookie *http.Cookie, err error) 
 		return
 	}
 
-	for i := 0; i < len(cookies); i++ {
-		if cookies[i].Name == name {
-			cookie = cookies[i]
+	for _, _cookie := range cookies {
+		if _cookie.Name == name {
+			cookie = _cookie
 			log.Debug("cookie:", cookie)
 			return
 		}

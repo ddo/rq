@@ -28,6 +28,19 @@ func TestNew(t *testing.T) {
 	}
 }
 
+func TestGetHTTPJar(t *testing.T) {
+	j := New()
+	if j == nil {
+		t.Error()
+		return
+	}
+
+	if j._jar != j.GetHTTPJar() {
+		t.Error()
+		return
+	}
+}
+
 func TestGet(t *testing.T) {
 	j := New()
 
