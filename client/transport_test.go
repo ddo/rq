@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	test_proxy_url = "https://127.0.0.1:8888"
+	testProxyURL = "https://127.0.0.1:8888"
 )
 
 func TestSetProxy(t *testing.T) {
@@ -16,7 +16,7 @@ func TestSetProxy(t *testing.T) {
 		return
 	}
 
-	err := client.SetProxy(test_proxy_url)
+	err := client.SetProxy(testProxyURL)
 	if err != nil {
 		t.Error()
 		return
@@ -28,7 +28,7 @@ func TestSetProxy(t *testing.T) {
 		t.Error()
 		return
 	}
-	if proxy.String() != test_proxy_url {
+	if proxy.String() != testProxyURL {
 		t.Error()
 		return
 	}
@@ -50,7 +50,7 @@ func TestSetProxyInvalidURL(t *testing.T) {
 
 func TestSetProxyFromNew(t *testing.T) {
 	client := New(&Option{
-		Proxy: test_proxy_url,
+		Proxy: testProxyURL,
 	})
 	if client == nil {
 		t.Error()
@@ -63,7 +63,7 @@ func TestSetProxyFromNew(t *testing.T) {
 		t.Error()
 		return
 	}
-	if proxy.String() != test_proxy_url {
+	if proxy.String() != testProxyURL {
 		t.Error()
 		return
 	}
@@ -71,7 +71,7 @@ func TestSetProxyFromNew(t *testing.T) {
 
 func TestUnSetProxy(t *testing.T) {
 	client := New(&Option{
-		Proxy: test_proxy_url,
+		Proxy: testProxyURL,
 	})
 	if client == nil {
 		t.Error()
