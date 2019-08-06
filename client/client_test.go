@@ -57,25 +57,6 @@ func TestNewWithTimeout(t *testing.T) {
 	}
 }
 
-func TestNewWithNoTimeout(t *testing.T) {
-	_client := New(&Option{
-		Timeout:   5 * time.Second,
-		NoTimeout: true,
-	})
-	if _client.httpClient.Timeout != 0 {
-		t.Error()
-		return
-	}
-	if _client.httpClient.Jar != nil {
-		t.Error()
-		return
-	}
-	if _client.httpClient.Transport != nil {
-		t.Error()
-		return
-	}
-}
-
 func TestNewWithCookie(t *testing.T) {
 	jar := jar.New()
 	_client := New(&Option{
@@ -96,9 +77,7 @@ func TestNewWithCookie(t *testing.T) {
 }
 
 func TestNewWithNoCookie(t *testing.T) {
-	_client := New(&Option{
-		Jar: nil,
-	})
+	_client := New(&Option{})
 	if _client.httpClient.Timeout != defaultTimeout {
 		t.Error()
 		return
@@ -114,7 +93,7 @@ func TestNewWithNoCookie(t *testing.T) {
 }
 
 func TestDefaultRq(t *testing.T) {
-	defaultRq := rq.Get("http://ddo.me")
+	defaultRq := rq.New("", "http://ddo.me")
 	defaultRq.Qs("_", "123456")
 	defaultRq.Qs("qs", "2")
 	defaultRq.Send("extra", "data")

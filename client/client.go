@@ -26,10 +26,9 @@ type Client struct {
 
 // Option contains client settings
 type Option struct {
-	Timeout   time.Duration
-	NoTimeout bool // if NoTimeout is false Timeout will be set as default
+	Timeout time.Duration // if 0, default timeout will be applied
 
-	Jar *jar.Jar // if Jar is nil there no cookie jar
+	Jar *jar.Jar // if Jar is nil, there no cookie jar
 
 	Proxy     string // Proxy option is the sugar syntax for Transport.Proxy
 	Transport http.RoundTripper
@@ -52,11 +51,8 @@ func New(opt *Option) *Client {
 	checkRedirect := opt.CheckRedirect
 	defaultRq := opt.DefaultRq
 
-	if opt.Timeout == 0 && !opt.NoTimeout {
+	if opt.Timeout == 0 {
 		timeout = defaultTimeout
-	}
-	if opt.NoTimeout {
-		timeout = 0
 	}
 
 	if opt.Jar != nil {
