@@ -9,9 +9,9 @@ A nicer interface for golang stdlib HTTP client
 -   jar: [here][godoc-jar-url]
 
 [godoc-img]: https://img.shields.io/badge/godoc-Reference-brightgreen.svg
-[godoc-url]: https://godoc.org/gopkg.in/ddo/rq.v0
-[godoc-client-url]: https://godoc.org/gopkg.in/ddo/rq.v0/client
-[godoc-jar-url]: https://godoc.org/gopkg.in/ddo/rq.v0/client/jar
+[godoc-url]: https://godoc.org/github.com/ddo/rq
+[godoc-client-url]: https://godoc.org/github.com/ddo/rq/client
+[godoc-jar-url]: https://godoc.org/github.com/ddo/rq/client/jar
 [semaphoreci-img]: https://semaphoreci.com/api/v1/ddo/rq/branches/master/shields_badge.svg
 [semaphoreci-url]: https://semaphoreci.com/ddo/rq
 [goreport-img]: https://goreportcard.com/badge/github.com/ddo/rq
@@ -35,7 +35,7 @@ Because golang HTTP client is a pain in the a...
 ## Installation
 
 ```sh
-go get -u gopkg.in/ddo/rq.v0
+go get -u github.com/ddo/rq
 ```
 
 ## Getting started
