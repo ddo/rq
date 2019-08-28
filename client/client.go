@@ -13,6 +13,8 @@ import (
 const (
 	defaultTimeout   = 3 * time.Minute
 	defaultRedirects = 10
+
+	defaultUserAgent = "github.com/ddo/rq"
 )
 
 var log = dlog.New("rq:client", nil)

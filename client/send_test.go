@@ -15,8 +15,7 @@ func TestDefaultSend(t *testing.T) {
 	r.Qs("k", "2", "3")
 	r.Qs("v", "4")
 
-	r.Set("User-Agent", "github.com/ddo/rq")
-	r.Set("Content-Type", "application/x-www-form-urlencoded gaga")
+	r.Set("content-type", "application/x-www-form-urlencoded gaga")
 
 	r.Send("data", "data value 1", "data value 2")
 	r.Send("extra", "data value 3")
@@ -30,7 +29,7 @@ func TestDefaultSend(t *testing.T) {
 		t.Error()
 		return
 	}
-	if !verifyHTTPBinRes(data, "application/x-www-form-urlencoded gaga") {
+	if !verifyHTTPBinRes(data, "application/x-www-form-urlencoded gaga", defaultUserAgent) {
 		t.Error()
 		return
 	}
@@ -38,7 +37,7 @@ func TestDefaultSend(t *testing.T) {
 
 func TestSend(t *testing.T) {
 	defaultRq := rq.Get("")
-	defaultRq.Set("User-Agent", "github.com/ddo/rq")
+	defaultRq.Set("user-agent", "ddo")
 
 	_client := New(&Option{
 		DefaultRq: defaultRq,
@@ -61,7 +60,7 @@ func TestSend(t *testing.T) {
 		t.Error()
 		return
 	}
-	if !verifyHTTPBinRes(data, "application/x-www-form-urlencoded") {
+	if !verifyHTTPBinRes(data, "application/x-www-form-urlencoded", "ddo") {
 		t.Error()
 		return
 	}
@@ -88,9 +87,9 @@ func TestSendErr(t *testing.T) {
 }
 
 // helper
-func verifyHTTPBinRes(data []byte, contentType string) bool {
+func verifyHTTPBinRes(data []byte, contentType, userAgent string) bool {
 	strs := pickjson.PickString(bytes.NewReader(data), "User-Agent", 1)
-	if len(strs) == 0 || strs[0] != "github.com/ddo/rq" {
+	if len(strs) == 0 || strs[0] != userAgent {
 		return false
 	}
 	strs = pickjson.PickString(bytes.NewReader(data), "Content-Type", 1)

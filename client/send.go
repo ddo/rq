@@ -27,6 +27,10 @@ func (c *Client) Send(r *rq.Rq, read bool) (data []byte, res *http.Response, err
 		return
 	}
 
+	if req.Header.Get("user-agent") == "" {
+		req.Header.Set("user-agent", defaultUserAgent)
+	}
+
 	log.Info(req.Method, "\t>", req.URL.String())
 	now := time.Now()
 
