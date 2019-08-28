@@ -1,7 +1,9 @@
 package rq
 
 import (
+	"fmt"
 	"io"
+	"strings"
 )
 
 // Rq contains nicer http request interface components
@@ -14,6 +16,43 @@ type Rq struct {
 	Header map[string][]string `json:"header"`
 
 	Body io.Reader `json:"-"`
+}
+
+func (rq *Rq) String() string {
+	// method and url
+	str := fmt.Sprintf("%s %s", rq.Method, rq.URL)
+
+	// query
+	if len(rq.Query) > 0 {
+		str = str + fmt.Sprintf("\nQuery:\n%s", printRqData(rq.Query))
+	}
+
+	// form
+	if len(rq.Form) > 0 {
+		str = str + fmt.Sprintf("\nForm:\n%s", printRqData(rq.Form))
+	}
+
+	// header
+	if len(rq.Header) > 0 {
+		str = str + fmt.Sprintf("\nHeader:\n%s", printRqData(rq.Header))
+	}
+
+	// body
+	if rq.Body != nil {
+		str = str + fmt.Sprintf("\nBody:\n\t%T: %v", rq.Body, rq.Body)
+	}
+
+	return str
+}
+
+func printRqData(data map[string][]string) string {
+	lines := []string{}
+
+	for key, arr := range data {
+		lines = append(lines, fmt.Sprintf("\t%s: %s", key, strings.Join(arr, ", ")))
+	}
+
+	return strings.Join(lines, "\n")
 }
 
 // New returms empty Rq object
