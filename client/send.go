@@ -16,15 +16,15 @@ func (c *Client) Send(r *rq.Rq, read bool) (data []byte, res *http.Response, err
 	// apply defaultRq
 	newRq := ApplyDefaultRq(c.defaultRq, r)
 
-	// set content type for form
-	if _, ok := newRq.Header["Content-Type"]; !ok && len(newRq.Form) > 0 && newRq.Body == nil {
-		r.Set("Content-Type", "application/x-www-form-urlencoded")
-	}
-
 	req, err := newRq.ParseRequest()
 	if err != nil {
 		log.Error(err)
 		return
+	}
+
+	// set content type for form
+	if req.Header.Get("content-type") == "" && len(newRq.Form) > 0 && newRq.Body == nil {
+		req.Header.Set("content-type", "application/x-www-form-urlencoded")
 	}
 
 	if req.Header.Get("user-agent") == "" {
