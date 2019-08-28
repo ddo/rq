@@ -25,6 +25,8 @@ jobs:
         fi
 
     - name: Test
+      env:
+        DLOG=*
       run: go test -v ./...
 
 
@@ -51,6 +53,8 @@ jobs:
         fi
 
     - name: Coverage
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
         go test -race -coverprofile=coverage.txt -covermode=atomic ./...
         bash <(curl -s https://codecov.io/bash)
