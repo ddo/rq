@@ -1,4 +1,4 @@
-# rq [![Build Status][semaphoreci-img]][semaphoreci-url] [![Go Report][goreport-img]][goreport-url] [![codecov][codecov-img]][codecov-url]
+# rq [![Build Status][githubaction-img]][githubaction-url] [![Go Report][goreport-img]][goreport-url] [![codecov][codecov-img]][codecov-url]
 
 A nicer interface for golang stdlib HTTP client
 
@@ -12,8 +12,8 @@ A nicer interface for golang stdlib HTTP client
 [godoc-url]: https://godoc.org/github.com/ddo/rq
 [godoc-client-url]: https://godoc.org/github.com/ddo/rq/client
 [godoc-jar-url]: https://godoc.org/github.com/ddo/rq/client/jar
-[semaphoreci-img]: https://semaphoreci.com/api/v1/ddo/rq/branches/master/shields_badge.svg
-[semaphoreci-url]: https://semaphoreci.com/ddo/rq
+[githubaction-img]: https://github.com/ddo/rq/workflows/Go/badge.svg
+[githubaction-url]: https://github.com/ddo/rq/actions
 [goreport-img]: https://goreportcard.com/badge/github.com/ddo/rq
 [goreport-url]: https://goreportcard.com/report/github.com/ddo/rq
 [codecov-img]: https://codecov.io/gh/ddo/rq/branch/master/graph/badge.svg
